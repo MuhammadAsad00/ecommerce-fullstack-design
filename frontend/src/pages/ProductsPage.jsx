@@ -83,7 +83,7 @@ const ProductsPage = () => {
               {/* Desktop View Controls */}
               <div className="hidden md:flex items-center space-x-4">
                 <label className="flex items-center space-x-2 cursor-pointer text-gray-600">
-                  <input type="checkbox" className="form-checkbox rounded text-blue-600" defaultChecked />
+                  <input type="checkbox" className="form-checkbox rounded text-blue-600"/>
                   <span>Verified only</span>
                 </label>
                 <select className="bg-white border border-gray-300 rounded px-4 py-2 text-gray-600">

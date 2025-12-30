@@ -12,8 +12,9 @@ import {
   X,
 } from "lucide-react";
 import NavIcon from "./NavIcon";
-import flag from "../../assets/flag.png";
+import flag from "../../assets/Image/country/11.png";
 import MobileSidebar from "./MobileSidebar";
+import UserNavIcon from "./UserNavIcon";
 
 const Navbar = () => {
   const location = useLocation();
@@ -82,7 +83,7 @@ const Navbar = () => {
 
             {/* Right: Actions */}
             <div className="flex items-center gap-4 lg:gap-6">
-              <NavIcon icon={<User size={20} />} label="Profile" />
+              <UserNavIcon/>
               <NavIcon icon={<ShoppingCart size={20} />} label="My cart" to="/cart" />
               <div className="hidden lg:flex">
                 <NavIcon icon={<MessageSquare size={20} />} label="Message" />
