@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 app.use(express.json());
 app.use(cors({
-    origin: ["https://ecommerce-fullstack-design-client.vercel.app", "http://localhost:5174"], 
+    origin: ["https://ecommerce-fullstack-design-client.vercel.app", "https://ecommerce-fullstack-design-admin.vercel.app"], 
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
