@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const adminAuth = (req, res, next) => {
     try {
-        const { token } = req.cookies;
+        const token = req.cookies?.token;
 
         // 1. Check if token exists
         if (!token) {
