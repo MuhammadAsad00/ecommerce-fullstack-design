@@ -11,11 +11,10 @@ const AdminContext = ({ children }) => {
 
     const getAdmin = async () => {
         try {
-            const result = await axios.get(serverUrl + "/api/user/getadmin",{withCredentials: true});
+            const result = await axios.get(`${serverUrl}/api/user/getadmin`,{withCredentials: true});
             if(result.data.success) {
                 setAdminData(result.data);
             }
-            console.log(result.data)
         } catch (error) {
             setAdminData(null);
             console.log("Error fetching admin data:", error);
