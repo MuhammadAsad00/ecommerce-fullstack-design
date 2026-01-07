@@ -1,3 +1,4 @@
+import uploadCloudinary from "../config/cloudinary.js";
 import Product from "../models/productModel.js";
 import fs from "fs";
 
@@ -5,18 +6,16 @@ export const addProduct = async (req, res) => {
   try {
     const { name, description, price, category, stock } = req.body;
 
-    // Get the filename from the multer upload
-    const imageName = req.file ? req.file.filename : "";
+    // Pass the memory buffer to Cloudinary
+    const imageUrl = await uploadCloudinary(req.file.buffer);
 
-    if (!imageName) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Image is required" });
+    if (!imageUrl) {
+        throw new Error("Cloudinary upload failed");
     }
 
     const product = await Product.create({
       name,
-      image: imageName,
+      image: imageUrl,
       description,
       price: Number(price),
       category,
