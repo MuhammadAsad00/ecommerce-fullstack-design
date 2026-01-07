@@ -29,9 +29,6 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// This line allows you to access images via: http://localhost:4000/uploads/filename.jpg
-app.use('/uploads', express.static('uploads'));
-
 app.set("trust proxy", 1);
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
