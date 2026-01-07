@@ -30,7 +30,7 @@ export const register = async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict',
+            sameSite: 'none',
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
         return res.json({ success: true, message: 'User registered successfully', user: user });
@@ -59,7 +59,7 @@ export const login = async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict',
+            sameSite: 'none',
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
         return res.json({ success: true, message: 'Login successful', user });
@@ -91,7 +91,7 @@ export const adminLogin = async (req, res) => {
            res.cookie('token', token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict',
+            sameSite: 'none',
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
        return res.status(200).json({ success: true, message: "Admin logged in successfully", token  });
