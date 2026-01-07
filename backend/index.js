@@ -11,18 +11,26 @@ import cartRoute from './routes/cartRoute.js';
 dotenv.config();
 let port = process.env.PORT || 3000;
 
-const app = express();
 app.set("trust proxy", 1);
+const app = express();
 app.use(cookieParser());
 
 app.use(express.json());
 app.use(cors({
-    origin: [
-        "https://ecommerce-fullstack-design-client.vercel.app",
-        "https://ecommerce-fullstack-design-admin.vercel.app"
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  origin: [
+    "https://ecommerce-fullstack-design-client.vercel.app",
+    "https://ecommerce-fullstack-design-admin.vercel.app"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+}));
+
+app.options("*", cors({
+  origin: [
+    "https://ecommerce-fullstack-design-client.vercel.app",
+    "https://ecommerce-fullstack-design-admin.vercel.app"
+  ],
+  credentials: true
 }));
 
 
