@@ -12,6 +12,7 @@ dotenv.config();
 let port = process.env.PORT || 3000;
 
 const app = express();
+app.set("trust proxy", 1);
 app.use(cookieParser());
 
 app.use(express.json());
@@ -24,7 +25,7 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }));
 
-app.set("trust proxy", 1);
+
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
 app.use('/api/cart', cartRoute);
