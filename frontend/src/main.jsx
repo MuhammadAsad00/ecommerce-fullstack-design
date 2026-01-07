@@ -5,12 +5,18 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import AuthContext from "./context/AuthContext.jsx";
 import UserContext from "./context/UserContext.jsx";
+import ShopContext from "./context/ShopContext.jsx";
+import CartContext from "./context/CartContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AuthContext>
       <UserContext>
+       <ShopContext>
+        <CartContext>
         <App />
+        </CartContext>
+       </ShopContext>
       </UserContext>
     </AuthContext>
   </BrowserRouter>

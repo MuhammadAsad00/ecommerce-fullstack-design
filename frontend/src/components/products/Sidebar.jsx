@@ -1,116 +1,99 @@
-import React from "react";
-import { ChevronDown } from "lucide-react";
-import RatingStars from "../common/RatingStars";
+import React, { useState } from "react"; // Added missing import
+import { useSearchParams } from "react-router-dom";
+import { X } from "lucide-react";
 
-const Sidebar = () => {
+const Sidebar = ({ isMobile, onClose }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [price, setPrice] = useState({
+    min: searchParams.get("minPrice") || "",
+    max: searchParams.get("maxPrice") || ""
+  });
+
+  const updateFilters = (key, value) => {
+    const params = new URLSearchParams(searchParams);
+    if (value) params.set(key, value);
+    else params.delete(key);
+    setSearchParams(params);
+    if (isMobile) onClose(); // Auto-close on mobile after selection
+  };
+
+  const handleApplyPrice = () => {
+    const params = new URLSearchParams(searchParams);
+    if (price.min) params.set("minPrice", price.min); else params.delete("minPrice");
+    if (price.max) params.set("maxPrice", price.max); else params.delete("maxPrice");
+    setSearchParams(params);
+    if (isMobile) onClose();
+  };
+
+  const handleClearAll = () => {
+    setSearchParams({}); // Wipes all URL params
+    setPrice({ min: "", max: "" });
+    if (isMobile) onClose();
+  };
+
+  const categories = ["Electronics", "Accessories", "Fashion", "Life Style"];
+
   return (
-    <aside className="w-64 pr-6 hidden md:block">
-      {/* Category */}
-      <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-3 flex justify-between items-center">
-          Category <ChevronDown size={16} />
-        </h3>
-        <ul className="space-y-2 text-gray-600">
-          <li><a href="#" className="text-blue-600">Mobile accessory</a></li>
-          <li><a href="#">Electronics</a></li>
-          <li><a href="#">Smartphones</a></li>
-          <li><a href="#">Modern tech</a></li>
-          <li><a href="#" className="text-sm text-blue-500">See all</a></li>
-        </ul>
-      </div>
+    <aside className={`${isMobile ? "w-full p-6" : "w-64 pr-6"}`}>
+      {/* Mobile Header */}
+      {isMobile && (
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold">Filters</h2>
+          <button onClick={onClose}><X size={24} /></button>
+        </div>
+      )}
 
-      {/* Brands */}
       <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-3 flex justify-between items-center">
-          Brands <ChevronDown size={16} />
-        </h3>
-        <ul className="space-y-2">
-          {['Samsung', 'Apple', 'Huawei', 'Pocco', 'Lenovo'].map((brand) => (
-            <li key={brand}>
-              <label className="flex items-center space-x-2 text-gray-600 cursor-pointer">
-                <input type="checkbox" className="form-checkbox rounded text-blue-600" />
-                <span>{brand}</span>
-              </label>
+        <h3 className="font-semibold mb-3 text-gray-900">Category</h3>
+        <ul className="space-y-3 text-gray-600">
+          {categories.map((cat) => (
+            <li key={cat}>
+              <button
+                onClick={() => updateFilters("category", cat)}
+                className={`w-full text-left transition-colors hover:text-blue-600 ${
+                  searchParams.get("category") === cat ? "text-blue-600 font-bold" : ""
+                }`}
+              >
+                {cat}
+              </button>
             </li>
           ))}
-          <li><a href="#" className="text-sm text-blue-500">See all</a></li>
         </ul>
       </div>
 
-      {/* Features */}
-      <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-3 flex justify-between items-center">
-          Features <ChevronDown size={16} />
-        </h3>
-        <ul className="space-y-2">
-          {['Metallic', 'Plastic cover', '8GB Ram', 'Super power', 'Large Memory'].map((feature) => (
-            <li key={feature}>
-              <label className="flex items-center space-x-2 text-gray-600 cursor-pointer">
-                <input type="checkbox" className="form-checkbox rounded text-blue-600" />
-                <span>{feature}</span>
-              </label>
-            </li>
-          ))}
-          <li><a href="#" className="text-sm text-blue-500">See all</a></li>
-        </ul>
-      </div>
-
-      {/* Price range */}
-      <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-3 flex justify-between items-center">
-          Price range <ChevronDown size={16} />
-        </h3>
-        <div className="flex items-center space-x-4 mb-4">
-          <input type="range" className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+      <div className="mb-8">
+        <h3 className="font-semibold mb-3 text-gray-900">Price range</h3>
+        <div className="flex items-center space-x-2">
+          <input
+            type="number"
+            placeholder="Min"
+            value={price.min}
+            onChange={(e) => setPrice({ ...price, min: e.target.value })}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none"
+          />
+          <span className="text-gray-400">-</span>
+          <input
+            type="number"
+            placeholder="Max"
+            value={price.max}
+            onChange={(e) => setPrice({ ...price, max: e.target.value })}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none"
+          />
         </div>
-        <div className="flex items-center space-x-4">
-          <div>
-            <label className="text-sm text-gray-600">Min</label>
-            <input type="number" placeholder="0" className="w-full border border-gray-300 rounded px-2 py-1" />
-          </div>
-          <div>
-            <label className="text-sm text-gray-600">Max</label>
-            <input type="number" placeholder="99999" className="w-full border border-gray-300 rounded px-2 py-1" />
-          </div>
-        </div>
-        <button className="mt-4 w-full bg-white border border-gray-300 text-blue-600 px-4 py-2 rounded hover:bg-gray-50">
-          Apply
+        <button
+          onClick={handleApplyPrice}
+          className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition-colors"
+        >
+          Apply Price
         </button>
       </div>
 
-      {/* Condition */}
-      <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-3 flex justify-between items-center">
-          Condition <ChevronDown size={16} />
-        </h3>
-        <ul className="space-y-2">
-          {['Any', 'Refurbished', 'Brand new', 'Old items'].map((condition, index) => (
-            <li key={condition}>
-              <label className="flex items-center space-x-2 text-gray-600 cursor-pointer">
-                <input type="radio" name="condition" defaultChecked={index === 0} className="form-radio text-blue-600" />
-                <span>{condition}</span>
-              </label>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Ratings */}
-      <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-3 flex justify-between items-center">
-          Ratings <ChevronDown size={16} />
-        </h3>
-        <ul className="space-y-2">
-          {[5, 4, 3, 2].map((rating) => (
-            <li key={rating}>
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input type="checkbox" className="form-checkbox rounded text-blue-600" defaultChecked={rating === 5} />
-                <RatingStars rating={rating * 2} />
-              </label>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <button 
+        onClick={handleClearAll}
+        className="w-full text-sm text-red-500 font-medium hover:underline"
+      >
+        Clear All Filters
+      </button>
     </aside>
   );
 };

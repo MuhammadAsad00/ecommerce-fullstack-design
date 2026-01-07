@@ -9,3 +9,12 @@ export const genToken = (userId) => {
         return null;
     }
 };
+
+export const adminToken = (email) => {
+    try {
+        const token = jwt.sign({email, role: "admin"}, process.env.JWT_SECRET,{expiresIn: '7d'});
+        return token;
+    } catch (error) {
+        console.error("Token failed",error);
+    }
+};

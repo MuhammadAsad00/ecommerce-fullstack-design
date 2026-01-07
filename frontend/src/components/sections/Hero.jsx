@@ -32,7 +32,7 @@ const Hero = () => {
         <SectionInquiry />
 
         {/* Recommended Items Component */}
-        <RecommendedItems items={recommended} />
+        <RecommendedItems/>
 
         {/* Services Component */}
         <SectionServices />

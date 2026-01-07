@@ -40,58 +40,62 @@ const UserNavIcon = () => {
 
   return (
     <>
-    
-    <div className="relative" ref={ref}>
-    {/* If userData is null, show the Guest Icon */}
-    {!userData ? (
-      <>
-       <div
-        onClick={() => setOpen(!open)}
-        className="flex flex-col items-center justify-center cursor-pointer group px-2"
-      >
-        <div className="text-gray-900 group-hover:text-blue-600">
-          <User size={20} />
-        </div>
-        <span className="hidden sm:inline-block text-[11px] sm:text-xs text-gray-500 mt-1 group-hover:text-blue-600">
-          Profile
-        </span>
-      </div>
-      </>
-    ) : (
-      <>
-       <div
-        onClick={() => setOpen(!open)}
-        className="flex flex-col items-center justify-center cursor-pointer group px-2"
-      >
-        <div className="text-gray-900 group-hover:text-blue-600">
-          <User size={20} />
-        </div>
-        <span className="hidden sm:inline-block text-[11px] sm:text-xs text-gray-500 mt-1 group-hover:text-blue-600">
-          Profile
-        </span>
-      </div>
-      </>
-    )}
+      <div className="relative" ref={ref}>
+        {/* If userData is null, show the Guest Icon */}
+        {!userData ? (
+          <>
+            <div
+              onClick={() => setOpen(!open)}
+              className="flex flex-col items-center justify-center cursor-pointer group px-2"
+            >
+              <div className="text-gray-900 group-hover:text-blue-600">
+                <User size={20} />
+              </div>
+              <span className="hidden sm:inline-block text-[11px] sm:text-xs text-gray-500 mt-1 group-hover:text-blue-600">
+                Profile
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              onClick={() => setOpen(!open)}
+              className="flex flex-col items-center justify-center cursor-pointer group px-2"
+            >
+              <div className="text-gray-900 group-hover:text-blue-600">
+                <User size={20} />
+              </div>
+              <span className="hidden sm:inline-block text-[11px] sm:text-xs text-gray-500 mt-1 group-hover:text-blue-600">
+                Profile
+              </span>
+            </div>
+          </>
+        )}
 
-    {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg py-2 z-50 flex flex-col text-gray-700">
+        {open && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg py-2 z-50 flex flex-col text-gray-700">
             <span className="px-4 py-2 font-semibold border-b border-gray-200">
-                {/* Fallback to Guest if name is missing */}
-                Welcome, {userData?.name || "Guest"}
+              Welcome, {userData?.name || "Guest"}
             </span>
-            
+
             {!userData ? (
-                <button className="text-left px-4 py-2 hover:bg-gray-100" onClick={() => navigate('/login')}>
-                    Login
-                </button>
+              <button
+                className="text-left px-4 py-2 hover:bg-gray-100"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </button>
             ) : (
-                <button className="text-left px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>
-                    Logout
-                </button>
+              <button
+                className="text-left px-4 py-2 hover:bg-gray-100"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
             )}
-        </div>
-    )}
-</div>
+          </div>
+        )}
+      </div>
     </>
   );
 };

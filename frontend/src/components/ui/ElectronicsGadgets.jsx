@@ -1,8 +1,12 @@
-import React from "react";
-import { electronics_gadgets } from "../data/Data";
+import { useContext } from "react";
 import { ArrowRight } from "lucide-react";
+import { shopDataContext } from "../../context/ShopContext";
 
 const ElectronicsGadgets = ({ title, bgImg }) => {
+  const { products, loading, serverUrl } = useContext(shopDataContext);
+  const ImageUrl = (imgName) => `${serverUrl}/uploads/${imgName}`;
+
+  if (loading) return null; 
   return (
     <div className="bg-white border border-gray-200 rounded-lg flex flex-col lg:flex-row overflow-hidden h-auto lg:h-64">
       {/* Banner Side — Desktop ONLY (unchanged) */}
@@ -25,13 +29,13 @@ const ElectronicsGadgets = ({ title, bgImg }) => {
 
       {/* Grid Side */}
       <div className="flex-1 flex lg:grid md:items-center flex-nowrap overflow-x-auto lg:overflow-visible lg:grid-cols-4 divide-x divide-y lg:divide-y divide-gray-200 no-scrollbar">
-        {electronics_gadgets.map((item, i) => (
+        {products.slice(8, 16).map((item) => (
           <div
-            key={i}
+            key={item._id}
             className="min-w-40 lg:min-w-0 min-h-45 lg:min-h-0 p-4 flex flex-col justify-between h-32 lg:h-auto border border-gray-200"
           >
             <div className="order-1 lg:order-2 lg:self-end w-19 h-12 rounded flex items-center justify-center text-xl">
-              <img src={item.img} alt={item.name} />
+              <img src={ImageUrl(item.image)} alt={item.name} />
             </div>
 
             {/* Text */}
@@ -39,7 +43,7 @@ const ElectronicsGadgets = ({ title, bgImg }) => {
               <h5 className="text-xs lg:text-sm font-medium text-gray-800 mb-1">
                 {item.name}
               </h5>
-              <p className="text-xs text-gray-400">{item.price}</p>
+              <p className="text-xs text-gray-400">$ {item.price}</p>
             </div>
           </div>
         ))}

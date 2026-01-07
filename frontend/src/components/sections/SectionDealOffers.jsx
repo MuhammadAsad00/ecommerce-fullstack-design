@@ -1,8 +1,13 @@
-import React from "react";
-import { deals } from "../data/Data";
+import { useContext } from "react";
 import TimerBox from "../ui/TimerBox";
+import { shopDataContext } from "../../context/ShopContext";
 
 const SectionDealOffers = () => {
+  const { products, loading, serverUrl } = useContext(shopDataContext);
+  const ImageUrl = (imgName) => `${serverUrl}/uploads/${imgName}`;
+
+  if (loading) return null; 
+
   return (
     <>
       {/* ================= DEALS & OFFERS ================= */}
@@ -26,23 +31,20 @@ const SectionDealOffers = () => {
 
         {/* Scrollable Products (mobile) */}
         <div className="flex-1 flex overflow-x-auto no-scrollbar divide-x divide-gray-200 lg:hidden">
-          {deals.map((deal, i) => (
+          {products.slice(0, 5).map((deal) => (
             <div
-              key={i}
+              key={deal._id}
               className="min-w-35 p-6 flex flex-col items-center justify-center gap-3 cursor-pointer hover:shadow-lg transition-shadow"
             >
               <div className="w-24 h-24 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
                 <img
-                  src={deal.img}
+                  src={ImageUrl(deal.image)}
                   alt={deal.name}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="text-center">
                 <p className="text-gray-800 font-medium text-sm">{deal.name}</p>
-                <span className="bg-red-100 text-red-500 text-xs px-2 py-0.5 rounded-full font-medium">
-                  {deal.discount}
-                </span>
               </div>
             </div>
           ))}
@@ -50,14 +52,14 @@ const SectionDealOffers = () => {
 
         {/* Desktop Grid (desktop-only) */}
         <div className="hidden lg:grid lg:grid-cols-5 gap-6 p-6 w-full">
-          {deals.map((deal) => (
+          {products.slice(0, 5).map((deal) => (
             <div
-              key={deal.id}
+              key={deal._id}
               className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-lg transition"
             >
               <div className="w-full h-36 overflow-hidden rounded-md mb-3">
                 <img
-                  src={deal.img}
+                  src={ImageUrl(deal.image)}
                   alt={deal.name}
                   className="w-full h-full object-cover"
                 />
@@ -65,9 +67,6 @@ const SectionDealOffers = () => {
               <p className="text-gray-800 font-semibold text-sm mb-2">
                 {deal.name}
               </p>
-              <span className="bg-red-100 text-red-500 text-xs px-2 py-0.5 rounded-full font-medium">
-                {deal.discount}
-              </span>
             </div>
           ))}
         </div>

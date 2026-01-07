@@ -16,13 +16,26 @@ export const getCurrentUser = async (req, res) => {
 
 export const getAdmin = async (req, res) => {
     try {
-        let adminEmail = req.adminEmail;
-        if (!adminEmail) {
-            return res.status(403).json({message: "Admin not found"});
+        // 1. Retrieve the decoded data attached by adminAuth middleware
+        const adminData = req.admin; 
+
+        // 2. Check if data exists (Security double-check)
+        if (!adminData) {
+            return res.status(401).json({ success: false, message: "Admin session not found" });
         }
-        res.status(201).json({email: adminEmail, role: "admin"});
+
+        // 3. Return success and the data
+        // Using 200 OK for a successful GET request
+        return res.status(200).json({ 
+            success: true, 
+            data: {
+                email: adminData.email, 
+                role: adminData.role 
+            }
+        });
+
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ message: "getadmin error" });
+        console.error("GetAdmin Controller Error:", error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
-}
+};

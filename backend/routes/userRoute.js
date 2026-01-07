@@ -1,6 +1,7 @@
 import express from 'express';
-import { getCurrentUser } from './../controller/userController.js';
+import { getAdmin, getCurrentUser } from './../controller/userController.js';
 import isAuth from '../middleware/isAuth.js';
+import adminAuth from '../middleware/adminAuth.js';
 
 const userRoute = express.Router();
 
@@ -9,6 +10,10 @@ userRoute.get('/', (req, res) => {
     res.send('User Route is working');
 });
 
+// Get user 
 userRoute.get('/getcurrentuser',isAuth, getCurrentUser);
+
+// Get admin
+userRoute.get('/getadmin', adminAuth, getAdmin);
 
 export default userRoute;

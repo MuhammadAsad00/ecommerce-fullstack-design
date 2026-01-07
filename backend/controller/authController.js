@@ -1,7 +1,7 @@
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
 import validator from 'validator';
-import { genToken } from '../config/token.js';
+import { adminToken, genToken } from '../config/token.js';
 
 // Register new user
 export const register = async (req, res) => {
@@ -78,4 +78,39 @@ export const logout = (req, res) => {
         console.log("Logout failed:", error);
         return res.json({ success: false, message: 'Logout failed 500 error' });
     }
+};
+
+// Admin Login
+export const adminLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Check email and password if match
+        if( email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD ) {
+           let token = adminToken(email);
+           res.cookie('token', token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+       return res.status(200).json({ success: true, message: "Admin logged in successfully", token  });
+    } else {
+        return res.status(401).json({ success: false, message: "Invalid admin credentials" });
+    }
+  } catch (error) {
+    console.error("Admin login error:", error);
+    return res.status(500).json({ success: false, message: `Admin login error: ${error.message}` });
+  }
+};
+
+// Admin logout
+export const adminLogout = (req, res) => {
+  try {
+    res.clearCookie("token");
+    return res.status(200).json({ message: "Admin logged out" });
+  } catch (error) {
+    console.log("Admin logout error");
+    return res.status(500).json({ message: `Admin logout error ${error.message}` });
+  }
 }
