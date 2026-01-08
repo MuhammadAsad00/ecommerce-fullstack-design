@@ -7,11 +7,15 @@ export const adminDataContext = createContext();
 
 const AdminContext = ({ children }) => {
     const [adminData, setAdminData] = useState(null);
-    let {serverUrl} = useContext(authDataContext);
+    let { serverUrl, token } = useContext(authDataContext);
 
     const getAdmin = async () => {
+        if (!token) return;
         try {
-            const result = await axios.get(`${serverUrl}/api/user/getadmin`,{withCredentials: true});
+            const result = await axios.get(`${serverUrl}/api/user/getadmin`, {
+                headers: { token }, // 3. Pass the token in headers
+                withCredentials: true
+            });            
             if(result.data.success) {
                 setAdminData(result.data);
             }
@@ -23,7 +27,7 @@ const AdminContext = ({ children }) => {
 
     useEffect(() => {
         getAdmin();
-    }, []);
+    }, [token]);
 
    let value = {
        adminData,
