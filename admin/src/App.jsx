@@ -13,23 +13,25 @@ import { Toaster } from "react-hot-toast";
 import ProductDetail from "./pages/ProductDetail";
 
 const App = () => {
+  // 1. Get token from your context (ensure your AuthContext provides this)
+  const token = localStorage.getItem('token'); 
   const { adminData } = useContext(adminDataContext);
 
   return (
     <>
-     <Toaster position="top-right"/>
-    <Routes>
-      {/* Login Page → if already logged in, redirect to admin */}
-      <Route
-        path="/login"
-        element={!adminData ? <Login /> : <Navigate to="/" replace />}
-      />
+      <Toaster position="top-right"/>
+      <Routes>
+        {/* If token exists, don't allow access to login */}
+        <Route
+          path="/login"
+          element={!token ? <Login /> : <Navigate to="/" replace />}
+        />
 
-      {/* Protected Admin Routes */}
-      <Route
-        path="/"
-        element={adminData ? <AdminLayout /> : <Navigate to="/login" replace />}
-      >
+        {/* Use token to protect the route */}
+        <Route
+          path="/"
+          element={token ? <AdminLayout /> : <Navigate to="/login" replace />}
+        >
         <Route index element={<Home />} />
         <Route path="users" element={<UserManagement />} />
         <Route path="products" element={<ProductManagement />} />
