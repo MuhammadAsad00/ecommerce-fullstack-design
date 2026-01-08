@@ -2,24 +2,23 @@ import jwt from "jsonwebtoken";
 
 const adminAuth = (req, res, next) => {
     try {
-        const { token } = req.cookies;
+        // Look for token in cookies OR in headers
+        const token = req.cookies.token || req.headers.token; 
 
-        // 1. Check if token exists
         if (!token) {
             return res.status(401).json({ success: false, message: "Not Authorized, Login Again" });
         }
 
-        // 2. Verify token (This throws an error if token is expired or invalid)
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // 3. Verify Admin Role (Crucial for security)
+        // Note: Check how you sign your token. 
+        // If you used (email + password) to sign it, use that check here.
+        // If you used { role: "admin" }, the check below is correct.
         if (decoded.role !== "admin") {
             return res.status(403).json({ success: false, message: "Forbidden: Access Denied" });
         }
 
-        // 4. Attach admin info to request
         req.admin = decoded; 
-        
         next();
     } catch (error) {
         console.error("Admin Authentication error:", error.message);
