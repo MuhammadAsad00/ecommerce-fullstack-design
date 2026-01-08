@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const adminAuth = (req, res, next) => {
     try {
         // Look for token in cookies OR in headers
-        const token = req.cookies.token || req.headers.token; 
+        const token = req.cookies.token;
 
         if (!token) {
             return res.status(401).json({ success: false, message: "Not Authorized, Login Again" });
