@@ -17,8 +17,10 @@ const Login = () => {
     try {
         const result = await axios.post(serverUrl + "/api/auth/adminlogin",{ email, password },{withCredentials: true});
         if(result.data.success) {
+            // 1. Save token immediately so App.jsx can see it
+            localStorage.setItem('token', result.data.token);
             toast.success(result.data.message);
-            getAdmin();
+            await getAdmin();
             navigate("/");
         } else {
             toast.error(result.data.message);
