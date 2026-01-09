@@ -1,25 +1,26 @@
 import { v2 as cloudinary } from 'cloudinary';
+import fs from 'fs';
 
-cloudinary.config({ 
-    cloud_name: process.env.CLOUDINARY_NAME, 
-    api_key: process.env.CLOUDINARY_API_KEY, 
-    api_secret: process.env.CLOUDINARY_API_SECRET 
-});
-
-const uploadCloudinary = async (fileBuffer) => {
-    if (!fileBuffer) return null;
-
-    return new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-            { folder: "products" },
-            (error, result) => {
-                if (error) return reject(error);
-                resolve(result.secure_url);
-            }
-        );
-        // Write the buffer to the stream
-        uploadStream.end(fileBuffer);
+const uploadCloudinary = async (filePath) => {
+    // Configuration
+    cloudinary.config({ 
+        cloud_name: process.env.CLOUDINARY_NAME, 
+        api_key: process.env.CLOUDINARY_API_KEY, 
+        api_secret: process.env.CLOUDINARY_API_SECRET 
     });
+    if (!filePath) {
+        return null;
+    }
+    try {
+        // Upload an image
+     const uploadResult = await cloudinary.uploader.upload(filePath)
+     fs.unlinkSync(filePath); // remove file from server after upload
+     return uploadResult.secure_url;
+    } catch (error) {
+        fs.unlinkSync(filePath); // remove file from server if upload fails
+        console.log(error); 
+    }
+    
 }
 
 export default uploadCloudinary;
