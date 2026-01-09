@@ -1,13 +1,12 @@
 import uploadCloudinary from "../config/cloudinary.js";
 import Product from "../models/productModel.js";
-import fs from "fs";
 
 export const addProduct = async (req, res) => {
   try {
     const { name, description, price, category, stock } = req.body;
 
     // Pass the memory buffer to Cloudinary
-    const imageUrl = await uploadCloudinary(req.file.buffer);
+    const imageUrl = await uploadCloudinary(req.file.path);
 
     if (!imageUrl) {
         throw new Error("Cloudinary upload failed");
